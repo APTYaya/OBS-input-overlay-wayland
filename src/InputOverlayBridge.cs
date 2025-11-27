@@ -22,7 +22,7 @@ class Program
 {
     static async Task Main(string[] args)
     {
-        string endpoint = "ws://127.0.0.1:8765";
+        string endpoint = "ws://localhost:8765";
         var wss = new WebSocketServer(endpoint);
 
         wss.AddWebSocketService<InputOverlayBehavior>("/");
