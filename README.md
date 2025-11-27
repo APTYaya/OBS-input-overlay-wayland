@@ -17,7 +17,7 @@ Simple keyboard/mouse overlay for OBS.
 
 1. `showmethekey-cli` writes JSON lines describing key and mouse events.
 2. `main.cs`:
-   - starts a WebSocket server on `ws://127.0.0.1:8765/`
+   - starts a WebSocket server on `ws://localhost:8765/`
    - reads `showmethekey-cli` stdout line by line
    - filters only:
      - `event_name == "KEYBOARD_KEY"` (keyboard)
