@@ -10,7 +10,7 @@
    - normalizeKey() below turns those into the labels used here + in the CSS.
 */
 
-const WS_URL = "ws://127.0.0.1:8765/";
+const WS_URL = "ws://localhost:8765/";
 
 /* 
    KEYS TO SHOW
