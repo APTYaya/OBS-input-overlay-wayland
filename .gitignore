@@ -1,0 +1,7 @@
+# build output
+bin/
+obj/
+publish/
+
+# vs code
+.vscode/

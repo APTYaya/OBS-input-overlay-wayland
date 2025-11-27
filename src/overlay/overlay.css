@@ -1,0 +1,338 @@
+/* 
+   KEY OVERLAY CONFIG / QUICK GUIDE
+   HOW TO ADD A NEW KEY:
+   1) Make sure your JS creates a .key element with data-key="YOUR_LABEL".
+      - Example in JS: keysToShow.push("G");
+   2) Decide where it goes in the grid:
+      - In #overlay, add a named slot to `grid-template-areas` (e.g. `g`).
+   3) Map the key label to that grid area:
+      - Example: .key[data-key="G"] { grid-area: g; }
+   4) (Optional) If it’s a special key (wider, offset, etc):
+      - Either give it its own CSS block, or reuse patterns like TAB/CAPS.
+
+   HOW TO MOVE KEYS AROUND:
+   - Edit the `grid-template-areas` on #overlay.
+   - Each word inside the quotes is a cell name; `.` means empty.
+   - The `grid-area:` values below must match these names.
+
+   ROW OFFSETS:
+   - `--row1-offset`, `--row2-offset`, `--row3-offset` shift whole rows
+     of keys horizontally for a staggered layout.
+   - You control which keys belong to which row by the selectors:
+     e.g. `.key[data-key="1"]` uses `--row1-offset`, etc.
+
+   SPECIAL KEY SIZES / POSITIONS:
+   - Keys like TAB, CAPS, SHIFT, CTRL, ALT, SPACE use their own CSS.
+   - You can tweak width/height and x/y offsets in :root below.
+
+   COLORS / STYLE:
+   - Global appearance is mostly controlled in `.key` and `.key.pressed`.
+   - Transparency of normal vs pressed states uses:
+       --key-bg-alpha, --key-pressed-bg-alpha
+*/
+
+:root {
+    /* Gap between keys */
+    --key-gap: 6px;
+
+    /* Horizontal offsets per row (staggered layout) */
+    --row1-offset: -18px;  
+    --row2-offset: -12px;  
+    --row3-offset: -6px;
+
+    /* TAB key sizing + offsets */
+    --tab-width: 80%;
+    --tab-height: 100%;
+    --tab-offset-x: -10px;  
+    --tab-offset-y: 0px;  
+    
+    /* CAPS key sizing + offsets */
+    --caps-width: 90%;
+    --caps-height: 100%;
+    --caps-offset-x: -5px;
+    --caps-offset-y: 0px;
+
+    /* SHIFT key sizing + offsets */
+    --shift-width: 95%;
+    --shift-height: 100%;
+    --shift-offset-x: 0px;
+    --shift-offset-y: 0px;
+
+    /* CTRL key sizing + offsets */
+    --ctrl-width: 110%;
+    --ctrl-height: 100%;
+    --ctrl-offset-x: 10px;
+    --ctrl-offset-y: 0px;
+
+    /* ALT key sizing + offsets */
+    --alt-width: 110%;
+    --alt-height: 100%;
+    --alt-offset-x: 23px;
+    --alt-offset-y: 0px;
+
+    /* SPACE key sizing + offsets */
+    --space-width: 140%;
+    --space-height: 100%;
+    --space-offset-x: 85px;
+    --space-offset-y: 0px;
+
+    /* Background alpha for idle / pressed keys controls the opacity of the keys / how transparent the keys look */
+    --key-bg-alpha: 0.50;
+    --key-pressed-bg-alpha: 0.70;
+}
+
+/* 
+   PAGE BASE
+   - Transparent background so OBS can overlay it.
+*/
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    overflow: hidden;
+    font-family: "JetBrains Mono", system-ui, sans-serif;
+    color: #e5e5e5;
+}
+
+/* 
+   OVERLAY GRID
+   - This defines the physical layout.
+   - To move/add/remove key slots, edit grid-template-areas.
+*/
+
+#overlay {
+    display: grid;
+
+    /* Size of each "cell" in the grid */
+    grid-template-columns: repeat(5, 65px);
+    grid-template-rows: 54px 54px 60px 60px 60px 60px;
+
+    column-gap: var(--key-gap);
+    row-gap: var(--key-gap);
+
+    padding: 8px 16px 10px;
+    width: max-content;
+
+    /* 
+      grid-template-areas:
+      - Each quoted line is a row.
+      - Each token is a cell name (use the same name in `grid-area` below).
+      - "." means empty space.
+    */
+    grid-template-areas:
+        ".      n1    n2    n3    n4"
+        "tab    q     w     e     r"
+        "caps   a     s     d     f"
+        "shift  z     x     c     v"
+        "ctrl   alt   space space ."
+        "m1full m1full dash m2full m2full";
+
+    align-items: center;
+    justify-items: center;
+    box-sizing: border-box;
+}
+
+/* 
+   KEY → GRID SLOT MAPPING
+   - Map data-key labels from JS to grid area names defined above.
+   - To add a new key:
+       1) Add a new name (e.g. "g") to grid-template-areas.
+       2) Add a .key[data-key="G"] { grid-area: g; } rule.
+*/
+
+/* Number row */
+.key[data-key="1"] { grid-area: n1; }
+.key[data-key="2"] { grid-area: n2; }
+.key[data-key="3"] { grid-area: n3; }
+.key[data-key="4"] { grid-area: n4; }
+
+/* QWER row */
+.key[data-key="TAB"] { grid-area: tab; }
+.key[data-key="Q"]   { grid-area: q; }
+.key[data-key="W"]   { grid-area: w; }
+.key[data-key="E"]   { grid-area: e; }
+.key[data-key="R"]   { grid-area: r; }
+
+/* ASDF row */
+.key[data-key="CAPS"] { grid-area: caps; }
+.key[data-key="A"]    { grid-area: a; }
+.key[data-key="S"]    { grid-area: s; }
+.key[data-key="D"]    { grid-area: d; }
+.key[data-key="F"]    { grid-area: f; }
+
+/* ZXCV row */
+.key[data-key="SHIFT"] { grid-area: shift; }
+.key[data-key="Z"]     { grid-area: z; }
+.key[data-key="X"]     { grid-area: x; }
+.key[data-key="C"]     { grid-area: c; }
+.key[data-key="V"]     { grid-area: v; }
+
+/* First Bottom row */
+.key[data-key="CTRL"]  { grid-area: ctrl; }
+.key[data-key="ALT"]   { grid-area: alt; }
+.key[data-key="SPACE"] { grid-area: space; }
+
+/* Second Bottom row */
+.key[data-key="M1"] { grid-area: m1full; }
+.key[data-key="-"]  { grid-area: dash; } /* Dash is just a seperator and doesn't do anything */
+.key[data-key="M2"] { grid-area: m2full; }
+
+/* 
+   BASE KEY STYLE
+   - This is the general look of every key.
+   - Adjust here for global styling changes.
+*/
+
+.key {
+    /* Default horizontal offset & scale (overridden per-row below) */
+    --offset-x: 0px;
+    --scale: 1;
+
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(18, 17, 17, var(--key-bg-alpha));
+    border-radius: 8px;
+    border: 3px solid rgb(0, 0, 0);
+
+    color: #d8d8d8;
+    text-align: center;
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    user-select: none;
+
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.85);
+
+    transform: translateX(var(--offset-x)) scale(var(--scale));
+    transition:
+        transform 0.08s ease,
+        box-shadow 0.08s ease,
+        border-color 0.08s ease,
+        background-color 0.08s ease,
+        color 0.08s ease;
+}
+
+/* Extra rounding for long keys (purely visual choice) */
+.key[data-key="SPACE"],
+.key[data-key="M1"],
+.key[data-key="M2"] {
+    border-radius: 8px;
+}
+
+/* 
+   ROW OFFSETS (STAGGER)
+   - Attach row offset variables to specific keys.
+   - Add more selectors here if you create new rows.
+*/
+
+.key[data-key="1"],
+.key[data-key="2"],
+.key[data-key="3"],
+.key[data-key="4"] {
+    --offset-x: var(--row1-offset);
+}
+
+.key[data-key="Q"],
+.key[data-key="W"],
+.key[data-key="E"],
+.key[data-key="R"] {
+    --offset-x: var(--row2-offset);
+}
+
+.key[data-key="A"],
+.key[data-key="S"],
+.key[data-key="D"],
+.key[data-key="F"] {
+    --offset-x: var(--row3-offset);
+}
+
+/* 
+   SPECIAL KEY SIZES / POSITIONS
+   - These override defaults for longer keys.
+   - Adjust the custom properties at :root for global tweaks.
+*/
+
+.key[data-key="TAB"] {
+    width: var(--tab-width);
+    height: var(--tab-height);
+    margin-left: var(--tab-offset-x);
+    margin-top: var(--tab-offset-y);
+}
+
+.key[data-key="CAPS"] {
+    width: var(--caps-width);
+    height: var(--caps-height);
+    margin-left: var(--caps-offset-x);
+    margin-top: var(--caps-offset-y);
+}
+
+.key[data-key="SHIFT"] {
+    width: var(--shift-width);
+    height: var(--shift-height);
+    margin-left: var(--shift-offset-x);
+    margin-top: var(--shift-offset-y);
+}
+
+.key[data-key="CTRL"] {
+    width: var(--ctrl-width);
+    height: var(--ctrl-height);
+    margin-left: var(--ctrl-offset-x);
+    margin-top: var(--ctrl-offset-y);
+}
+
+.key[data-key="ALT"] {
+    width: var(--alt-width);
+    height: var(--alt-height);
+    margin-left: var(--alt-offset-x);
+    margin-top: var(--alt-offset-y);
+}
+
+.key[data-key="SPACE"] {
+    width: var(--space-width);
+    height: var(--space-height);
+    margin-left: var(--space-offset-x);
+    margin-top: var(--space-offset-y);
+}
+
+/* Mouse + dash key: use normal scale (here mostly for future tweaks) */
+.key[data-key="M1"],
+.key[data-key="M2"],
+.key[data-key="-"] {
+    --scale: 1;
+}
+
+/* 
+   PRESSED STATE
+   - This is applied when JS adds the `.pressed` class on keydown.
+   - If you want a different glow color, change the border + shadows.
+*/
+
+.key.pressed {
+    border-color: #ffdb88;
+    color: #ffffff;
+    background: rgba(20, 18, 10, var(--key-pressed-bg-alpha));
+
+    transform: translateX(var(--offset-x)) translateY(-1px) scale(var(--scale));
+    box-shadow:
+        0 0 0 1px rgba(255, 219, 136, 0.9),
+        0 0 12px rgba(255, 219, 136, 0.9),
+        0 0 28px rgba(255, 219, 136, 0.8);
+}
+
+
+
+
+
+
+
+
+
+
