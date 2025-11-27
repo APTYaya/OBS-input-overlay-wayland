@@ -9,7 +9,7 @@ Simple keyboard/mouse overlay for OBS.
 ## Requirements
 
 - Linux (this uses `/usr/bin/showmethekey-cli`)
-- [`showmethekey-cli`](https://github.com/hamelu/showmethekey) installed and available at `/usr/bin/showmethekey-cli`
+- [`showmethekey-cli`](https://github.com/AlynxZhou/showmethekey) installed and available at `/usr/bin/showmethekey-cli`
 - .NET (to build/run the C# bridge)
 - OBS (or anything that can show a browser source)
 
